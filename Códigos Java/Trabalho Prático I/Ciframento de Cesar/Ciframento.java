@@ -9,14 +9,14 @@ import java.util.*;
  * de caracteres. Assim, por exemplo, se a chave utilizada para criptografar as mensagens for 3,
  * todas as ocorrências do caractere ’a’ são substituídas pelo caractere ’d’, as do ’b’ por ’e’, e assim
  * sucessivamente. Crie um método iterativo que recebe uma string como parâmetro e retorna
- * outra contendo a entrada de forma cifrada. Neste exercício, suponha a chave de ciframento trˆes.
+ * outra contendo a entrada de forma cifrada. Neste exercício, suponha a chave de ciframento três.
  * Na saída padrão, para cada linha de entrada, escreva uma linha com a mensagem criptografada.
  */
 
 class Ciframento{
     public static void main(String[] args){
         try{
-            File file = new File("./Códigos Java/Trabalho Prático I/Palindromo/input.txt");
+            File file = new File("./Códigos Java/Trabalho Prático I/Ciframento de Cesar/input.txt");
 
             Scanner leitor = new Scanner(file, "ISO-8859-1");
 
