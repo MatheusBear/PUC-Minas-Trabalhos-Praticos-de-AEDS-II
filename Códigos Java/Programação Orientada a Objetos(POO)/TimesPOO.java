@@ -10,17 +10,6 @@ import java.nio.file.Paths;
 import java.net.*;
 
 public class TimesPOO{
-	public static String convertISOtoUTF8(String str) {
-        String ret = null;
-        try {
-            ret = new String(str.getBytes("UTF-8"), "ISO-8859-1");
-        }
-        catch (java.io.UnsupportedEncodingException e) {
-            return null;
-        }
-        return ret;
-    }
-
     public static void main(String[] args){
         File file = new File("./Códigos Java/Programação Orientada a Objetos(POO)/Banco de Dados/Times/");
         File[] Lista = file.listFiles();
@@ -30,6 +19,7 @@ public class TimesPOO{
             if (folder.isFile()) {
                 String i = folder.getName();
                 time.leitura(i);
+                time.Print();
             }
         }
     }
@@ -377,27 +367,14 @@ class Time{
 
                     //Estadio
                     if(linha.contains("Ground") && contEstadio == 0){
-                        //Esses Times estao dando erro no html, aparentemente é o unicode utilizado. 
-                        //Como não sei qual é o unicode utilizado, vou adicionar o Estadio dele manualmente.
-                        if(url.contains("Lillestrom")){
-                            this.setEstadio("Åråsen Stadion");
-                        }if(url.contains("Ferizaj")){
-                            this.setEstadio("Ismet Shabani Stadium");
-                        }
-                        if(url.contains("Flumi")){
-                            this.setEstadio("Maracanã Ground");
-                        }
-                        if(url.contains("Thessaloniki")){
-                            this.setEstadio("Kleanthis Vikelidis Ground");
-                        }else{
-                            String[] test = linha.split("Ground");
-                            String[] info = test[1].split("</a>");
-                            String[] Stadium = info[0].split(">");
+                        String[] test = linha.split("Ground", 2);
+                        String[] info = test[1].split("</a>");
+                        String[] Stadium = info[0].split(">");
 
-                            int x = Stadium.length - 1;
+                        int x = Stadium.length - 1;
 
-                            this.setEstadio(Stadium[x]);
-                        }
+                        this.setEstadio(Stadium[x]);
+
                         contEstadio++;
                     }
 
@@ -416,31 +393,64 @@ class Time{
                         this.setCapacidade(Cap);
 
                         contCapacidade++;
+
                     }
 
                     //Coach
-                    if((linha.contains("Coach") || linha.contains("Manager")) && contCoach == 0){
-                        if(linha.contains("Coach")){
-                            String[] test = linha.split("Coach");
-                            System.out.println();
-                            System.out.println(url);
-                            System.out.println();
-                            System.out.println(test[1]);
-                            System.out.println();
-                            System.out.println();
-                        }else{
+                    if((linha.toLowerCase().contains("coach") || linha.toLowerCase().contains("manager")) && contCoach == 0){
+                        if(linha.contains("Manager") && contCoach == 0){
                             String[] test = linha.split("Manager");
-                            System.out.println();
-                            System.out.println(url);
-                            System.out.println();
-                            System.out.println(test[1]);
-                            System.out.println();
-                            System.out.println();
+                            String[] info = test[1].split("League");
+
+                            String Coach = removeTag(info[0]);
+                            if(Coach.contains(">")){
+                                String[] line = Coach.split(">");
+                                this.setTecnico(line[1]);
+                            }else{
+                                this.setTecnico(Coach);
+                            }
+                            contCoach++;
+                        }
+                        if(linha.contains("Coach") && contCoach == 0){
+                            String[] test = linha.split("Coach");
+                            String[] info = test[1].split("League");
+                            
+                            String Coach = removeTag(info[0]);
+                            if(Coach.contains(">")){
+                                String[] line = Coach.split(">");
+                                this.setTecnico(line[1]);
+                            }else{
+                                this.setTecnico(Coach);
+                            }
+                            contCoach++;
+                        }
+                        if(linha.contains("coach") && contCoach == 0){
+                            String[] test = linha.split("coach");
+                            String[] info = test[1].split("League");
+                            
+                            String Coach = removeTag(info[0]);
+
+                            if(Coach.contains(">")){
+                                String[] line = Coach.split(">");
+                                this.setTecnico(line[1]);
+                            }else{
+                                this.setTecnico(Coach);
+                            }
+                            contCoach++;
                         }
 
-                        contCoach++;
+                        //League
+                        if(linha.contains("League") && contLeague == 0){
+                            String[] test = linha.split("League", 2);
+                            String[] info = test[1].split("</a>");
+
+                            String league = removeTag(info[0]);
+
+                            this.setLiga(league);
+
+                            contLeague++;
+                        }
                     }
-                
                 }
             }
             leitor.close();
@@ -448,5 +458,49 @@ class Time{
             System.out.println("Error");
             e.printStackTrace();
         }
+    }
+
+    /** Metodo Print
+        *@return   capacidade int
+        *@return   FundacaoDia int
+        *@return   FundacaoMes int
+        *@return   FundacaoAno int
+        *@return   nome String
+        *@return   apelido String
+        *@return   estadio String
+        *@return   tecnico String
+        *@return   liga String
+        *@return   nomeArquivo String
+        *@return   paginaTamBytes long
+    */
+
+    public void Print(){
+        String Nome = convertUTF8toISO(this.getNome());
+        String Apelido = convertUTF8toISO(this.getApelido());
+        String Tecnico = convertUTF8toISO(this.getTecnico());
+        String Liga = convertUTF8toISO(this.getLiga());
+        String Estadio = convertUTF8toISO(this.getEstadio());
+
+        System.out.println("Nome: " + Nome); 
+        System.out.println("Nome do Arquivo: " + this.getNomeArquivo() + " Tamanho do Arquivo: " + this.getPaginaTam() + "bytes");      
+        System.out.println("Apelido: " + Apelido);
+        System.out.println("Data da Fundação: " + this.getFundacaoDia() + "/" + this.getFundacaoMes() + "/" + this.getFundacaoAno());
+        System.out.println("Tecnico: " + Tecnico);
+        System.out.println("Liga: " + Liga);
+        System.out.println("Estadio: " + Estadio);
+        System.out.println("Capacidade: " + this.getCapacidade());
+
+        System.out.println();
+    }
+
+    public static String convertUTF8toISO(String str) {
+        String ret = null;
+        try {
+            ret = new String(str.getBytes("ISO-8859-1"), "UTF-8");
+        }
+        catch (java.io.UnsupportedEncodingException e) {
+            return null;
+        }
+        return ret;
     }
 }
