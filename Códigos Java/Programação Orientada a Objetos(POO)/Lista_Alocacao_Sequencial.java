@@ -9,21 +9,267 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.net.*;
 
-public class TimesPOO{
-    public static void main(String[] args){
+public class Lista_Alocacao_Sequencial{
+    public static void main(String[] args)throws Exception{
+        Time time = new Time();
+        ListaSequencial list = new ListaSequencial(100);
         File file = new File("./Códigos Java/Programação Orientada a Objetos(POO)/Banco de Dados/Times/");
         File[] Lista = file.listFiles();
-        Time time = new Time();
+        //Leitura do input        
+        try{
+            File input = new File("./Códigos Java/Programação Orientada a Objetos(POO)/pubListaSequencial.in");
 
-        for (File folder : Lista) {
-            if (folder.isFile()) {
-                String i = folder.getName();
-                time.leitura(i);
-                time.Print();
+            Scanner leitor = new Scanner(input);
+
+            while(leitor.hasNextLine()){
+                String linha = leitor.nextLine();
+
+                if(linha.equals("FIM")){
+                    break;
+                }
+
+                //Tirar o /tmp/times/ do nome
+                String[] EntradaClean = linha.split("/");
+                String nome = EntradaClean[3];
+
+                for (File folder : Lista) {
+                    if (folder.isFile()) {
+                        String i = folder.getName();
+                        
+                        if(i.equals(nome)){
+                            time.leitura(i);
+                            list.inserirLast(time);
+                        }
+                    }
+                }
             }
+
+            leitor.nextLine();
+
+            while(leitor.hasNextLine()){
+                String linha = leitor.nextLine();
+                String nTime;
+                int pos;
+
+                if(linha.contains("II")){
+                    String aux[] = linha.split(" ");
+                    nTime = aux[1];
+
+                    //Tirar o /tmp/times/ do nome
+                    String[] EntradaClean = nTime.split("/");
+                    String nome = EntradaClean[3];
+
+                    for (File folder : Lista) {
+                        if (folder.isFile()) {
+                            String i = folder.getName();
+                            
+                            if(i.equals(nome)){
+                                time.leitura(i);
+                                list.inserirFirst(time);
+                            }
+                        }
+                    }
+                }else if(linha.contains("IF")){
+                    String aux[] = linha.split(" ");
+                    nTime = aux[1];
+
+                    //Tirar o /tmp/times/ do nome
+                    String[] EntradaClean = nTime.split("/");
+                    String nome = EntradaClean[3];
+
+                    for (File folder : Lista) {
+                        if (folder.isFile()) {
+                            String i = folder.getName();
+                            
+                            if(i.equals(nome)){
+                                time.leitura(i);
+                                list.inserirLast(time);
+                            }
+                        }
+                    }
+                }else if(linha.contains("I*")){
+                    String aux[] = linha.split(" ");
+                    pos = Integer.parseInt(aux[1]);
+                    nTime = aux[2];
+
+                    //Tirar o /tmp/times/ do nome
+                    String[] EntradaClean = nTime.split("/");
+                    String nome = EntradaClean[3];
+
+                    for (File folder : Lista) {
+                        if (folder.isFile()) {
+                            String i = folder.getName();
+                            
+                            if(i.equals(nome)){
+                                time.leitura(i);
+                                list.inserir(time, pos);
+                            }
+                        }
+                    }
+                }else if(linha.contains("R*")){
+                    String aux[] = linha.split(" ");
+                    pos = Integer.parseInt(aux[1]);
+
+                    System.out.println("(R) " + list.remove(pos).getNome());
+                }else if(linha.contains("RI")){
+                    System.out.println("(R) " + list.removeFirst().getNome());
+                }else if(linha.contains("RI")){
+                    System.out.println("(R) " + list.removeLast().getNome());
+                }
+            }
+            list.Show();
+            leitor.close();
+        }catch(IOException e){
+            System.out.println("Error");
+            e.printStackTrace();
         }
     }
 }
+
+
+//Criação do metodo da Lista com Alocação Sequencial
+class ListaSequencial{
+    private Time[] array;
+    private int x;
+
+    public Time[] retorna(){
+   		return array;
+   	}
+
+    public ListaSequencial(){
+        this(100);
+    }
+
+    /**
+    * Metodo construtor da classe.
+    * @param tam Tamanho da Lista.
+    */
+   
+	public ListaSequencial(int tam){
+		array = new Time[tam];
+		x = 0;
+   	}
+
+    /**
+     * Metodo para inserir o time no inicio da lista
+     * @param time Objeto Time
+     * @throws Exception Quando houver um erro ao inserir o objeto(Time)
+     */    
+    void inserirFirst(Time time) throws Exception{
+		//validar insercao
+      	if(x >= array.length){
+        	 throw new Exception("Erro ao inserir!");
+      	} 
+        //levar elementos para o fim do array
+      	for(int i = x; i > 0; i--){
+         	array[i] = array[i-1];
+      	}
+
+      	array[0] = time.clone();
+      	x++;
+    }
+
+    /**
+     * Metodo para inserir o time no final da lista
+     * @param time Objeto Time
+     * @throws Exception Quando houver um erro ao inserir o objeto(Time)
+     */
+    public void inserirLast(Time time) throws Exception {
+		//validar insercao
+      	if(x >= array.length){
+         	throw new Exception("Erro ao inserir!");
+      	}
+
+      	array[x] = time.clone();
+      	x++;
+   	}
+
+    /**
+     * Metodo para adicionar o time na posicao desejada da lista
+     * @param time Objeto Time
+     * @param pos Posicao desejada
+     * @throws Exception Quando houver um erro ao inserir o objeto(Time) na posicao desejada
+     */
+    public void inserir(Time time, int pos) throws Exception {
+        //validar insercao
+        if(x >= array.length || pos < 0 || pos > x){
+            throw new Exception("Erro ao inserir!");
+        }
+
+        //levar elementos para o fim do array
+        for(int i = x; i > pos; i--){
+            array[i] = array[i-1];
+        }
+        array[pos] = time.clone();
+        x++;
+    }
+
+    /**
+     * Metodo para remover o primeiro da lista
+     * @return  array(Lista) com o primeiro removido
+     * @throws Exception Erro caso o tamanho do array(Lista) for 0 
+     */    
+    public Time removeFirst() throws Exception {
+      	//validar remocao
+      	if (x == 0) {
+         	throw new Exception("Erro ao remover!");
+      	}
+
+      	Time resp = array[0].clone();
+      	x--;
+
+      	for(int i = 0; i < x; i++){
+         	array[i] = array[i+1];
+      	}
+      	return resp;
+   	}
+
+    /**
+     * Metodo para remover o ultimo da lista
+     * @return  array(Lista) com o ultimo removido
+     * @throws Exception Erro caso o tamanho do array(Lista) for 0 
+     */ 
+    public Time removeLast() throws Exception {
+      	//validar remocao
+      	if (x == 0) {
+         	throw new Exception("Erro ao remover!");
+      	}
+      	return array[--x].clone();
+   	}
+
+    /**
+     * Metodo para remover o time na posicao desejado da lista
+     * @param pos posicao do time que deseja remover
+     * @return  array(Lista) com o time da posicao removido
+     * @throws Exception Erro caso o tamanho do array(Lista) for 0  
+     *                   ou as posicoes desejada for um numero abaixo de 
+     *                   0 ou maior que o tamanho do array(Lista)
+     */
+	public Time remove(int pos) throws Exception {
+      	//validar remocao
+      	if (x == 0 || pos < 0 || pos >= x) {
+         	throw new Exception("Erro ao remover!");
+      	}
+
+      	Time resp = array[pos];
+      	x--;
+
+      	for(int i = pos; i < x; i++){
+         	array[i] = array[i+1].clone();
+     	}
+      	return resp;
+   	}
+
+    public void Show(){
+        for(int i = 0; i < x; i++){
+            if(array[i] != null){
+                array[i].Print();
+            }
+        }
+    }
+
+}
+
 
 class Time{
     private int capacidade, FundacaoDia, FundacaoMes, FundacaoAno;
@@ -255,6 +501,11 @@ class Time{
         return 0;
     }
 
+    /**
+     * Metodo para a leitura do arquivo mandado
+     * @param url nome da pagina pesquisada
+     */
+
     public void leitura(String url){
         try{
             int contNome = 0, contApelido = 0, contdia = 0, contAno = 0, contFund = 0, contEstadio = 0, contCapacidade = 0, contCoach = 0, contLeague = 0;
@@ -481,6 +732,7 @@ class Time{
         String Liga = convertUTF8toISO(this.getLiga());
         String Estadio = convertUTF8toISO(this.getEstadio());
 
+        System.out.println();
         System.out.println("Nome: " + Nome); 
         System.out.println("Nome do Arquivo: " + this.getNomeArquivo() + " Tamanho do Arquivo: " + this.getPaginaTam() + " bytes");      
         System.out.println("Apelido: " + Apelido);
@@ -490,7 +742,6 @@ class Time{
         System.out.println("Estadio: " + Estadio);
         System.out.println("Capacidade: " + this.getCapacidade());
 
-        System.out.println();
     }
 
     public static String convertUTF8toISO(String str) {
