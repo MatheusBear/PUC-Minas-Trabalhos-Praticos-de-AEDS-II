@@ -1,10 +1,13 @@
+package Pesquisas;
 import java.util.*;
 import java.io.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Comparator;
 
-public class Lista_Alocacao_Sequencial{
+public class PesquisaBinaria{
     public static void main(String[] args)throws Exception{
         Time time = new Time();
         ListaSequencial list = new ListaSequencial(100);
@@ -12,7 +15,7 @@ public class Lista_Alocacao_Sequencial{
         File[] Lista = file.listFiles();
         //Leitura do input        
         try{
-            File input = new File("./Códigos Java/Programação Orientada a Objetos(POO)/pubListaSequencial.in");
+            File input = new File("./Códigos Java/Programação Orientada a Objetos(POO)/Pesquisas/pubPesquisaBinaria.in");
 
             Scanner leitor = new Scanner(input);
 
@@ -42,77 +45,18 @@ public class Lista_Alocacao_Sequencial{
             leitor.nextLine();
 
             while(leitor.hasNextLine()){
-                String linha = leitor.nextLine();
-                String nTime;
-                int pos;
+                String nome = leitor.nextLine();
 
-                if(linha.contains("II")){
-                    String aux[] = linha.split(" ");
-                    nTime = aux[1];
-
-                    //Tirar o /tmp/times/ do nome
-                    String[] EntradaClean = nTime.split("/");
-                    String nome = EntradaClean[3];
-
-                    for (File folder : Lista) {
-                        if (folder.isFile()) {
-                            String i = folder.getName();
-                            
-                            if(i.equals(nome)){
-                                time.leitura(i);
-                                list.inserirFirst(time);
-                            }
-                        }
-                    }
-                }else if(linha.contains("IF")){
-                    String aux[] = linha.split(" ");
-                    nTime = aux[1];
-
-                    //Tirar o /tmp/times/ do nome
-                    String[] EntradaClean = nTime.split("/");
-                    String nome = EntradaClean[3];
-
-                    for (File folder : Lista) {
-                        if (folder.isFile()) {
-                            String i = folder.getName();
-                            
-                            if(i.equals(nome)){
-                                time.leitura(i);
-                                list.inserirLast(time);
-                            }
-                        }
-                    }
-                }else if(linha.contains("I*")){
-                    String aux[] = linha.split(" ");
-                    pos = Integer.parseInt(aux[1]);
-                    nTime = aux[2];
-
-                    //Tirar o /tmp/times/ do nome
-                    String[] EntradaClean = nTime.split("/");
-                    String nome = EntradaClean[3];
-
-                    for (File folder : Lista) {
-                        if (folder.isFile()) {
-                            String i = folder.getName();
-                            
-                            if(i.equals(nome)){
-                                time.leitura(i);
-                                list.inserir(time, pos);
-                            }
-                        }
-                    }
-                }else if(linha.contains("R*")){
-                    String aux[] = linha.split(" ");
-                    pos = Integer.parseInt(aux[1]);
-
-                    System.out.println("(R) " + list.remove(pos).getNome());
-                }else if(linha.contains("RI")){
-                    System.out.println("(R) " + list.removeFirst().getNome());
-                }else if(linha.contains("RI")){
-                    System.out.println("(R) " + list.removeLast().getNome());
+                if(nome.equals("FIM")){
+                    break;
                 }
+                
+                boolean existe = list.PesquisaBinaria(nome);
+
+                if(existe) System.out.println("SIM");
+                else System.out.println("NAO");
             }
-            list.Show();
+
             leitor.close();
         }catch(IOException e){
             System.out.println("Error");
@@ -255,12 +199,44 @@ class ListaSequencial{
       	return resp;
    	}
 
+    /**
+     * Método para mostrar os objetos na lista
+     */
     public void Show(){
         for(int i = 0; i < x; i++){
             if(array[i] != null){
                 array[i].Print();
             }
         }
+    }
+
+    /**
+     * Método para a Pesquisa Binaria
+     * @param Name Nome a ser pesquisado
+     */
+    public boolean PesquisaBinaria(String Name){
+
+        Comparator<Time> nameComparator = Comparator.comparing(Time::getNome);
+        Arrays.sort(array, nameComparator);
+        
+        int inf = 0; //Limite Inferior
+        int sup = x - 1; //Limite Superior
+
+        while(inf <= sup){
+            int meio = (inf + sup)/2;
+            int compare = Name.compareTo(array[meio].getNome());
+
+
+            if(compare < 0){
+                sup = meio - 1;
+            }else if(compare > 0){
+                inf = meio + 1;
+            }else{
+                return true;
+            }
+        }
+        
+        return false;
     }
 
 }
@@ -750,3 +726,4 @@ class Time{
         return ret;
     }
 }
+

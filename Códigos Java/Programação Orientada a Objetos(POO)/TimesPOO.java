@@ -1,13 +1,8 @@
 import java.util.*;
 import java.io.*;
-import java.math.*;
-import java.time.*;
-import java.nio.charset.*;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.net.*;
 
 public class TimesPOO{
     public static void main(String[] args){

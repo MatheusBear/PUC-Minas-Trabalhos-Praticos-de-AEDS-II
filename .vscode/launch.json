@@ -1,0 +1,62 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Java",
+            "type": "java",
+            "request": "launch",
+            "stopOnEntry": true,
+            "jdkPath": "${env:JAVA_HOME}/bin",
+            "cwd": "${fileDirname}",
+            "startupClass": "${fileBasenameNoExtension}",
+            "classpath": [
+                ".",
+                "${fileDirname}"
+            ]
+        },
+        {
+            "name": "Java Console App",
+            "type": "java",
+            "request": "launch",
+            "stopOnEntry": true,
+            "jdkPath": "${env:JAVA_HOME}/bin",
+            "cwd": "${fileDirname}",
+            "startupClass": "${fileBasenameNoExtension}",
+            "classpath": [
+                ".",
+                "${fileDirname}"
+            ],
+            "externalConsole": true
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Alteracao",
+            "request": "launch",
+            "mainClass": "Alteracao",
+            "projectName": "PUC-Minas-Trabalhos-Praticos-de-AEDS-II_c9196ca4"
+        },
+        {
+            "type": "java",
+            "name": "Fila_Circular_Sequencial",
+            "request": "launch",
+            "mainClass": "Fila_Circular_Sequencial",
+            "projectName": "PUC-Minas-Trabalhos-Praticos-de-AEDS-II_c9196ca4"
+        },
+        {
+            "type": "java",
+            "name": "PesquisaBinaria",
+            "request": "launch",
+            "mainClass": "Pesquisas.PesquisaBinaria",
+            "projectName": "PUC-Minas-Trabalhos-Praticos-de-AEDS-II_c9196ca4"
+        }
+    ]
+}

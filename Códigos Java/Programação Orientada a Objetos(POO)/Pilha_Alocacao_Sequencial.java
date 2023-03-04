@@ -1,13 +1,8 @@
 import java.util.*;
 import java.io.*;
-import java.math.*;
-import java.time.*;
-import java.nio.charset.*;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.net.*;
 
 public class Pilha_Alocacao_Sequencial{
     public static void main(String[] args)throws Exception{
@@ -49,7 +44,6 @@ public class Pilha_Alocacao_Sequencial{
             while(leitor.hasNextLine()){
                 String linha = leitor.nextLine();
                 String nTime;
-                int pos;
 
                 if(linha.contains("I")){
                     String aux[] = linha.split(" ");
