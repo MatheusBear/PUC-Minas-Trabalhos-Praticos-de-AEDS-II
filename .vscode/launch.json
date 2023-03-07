@@ -5,6 +5,27 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "InsertionSort",
+            "request": "launch",
+            "mainClass": "InsertionSort",
+            "projectName": "PUC-Minas-Trabalhos-Praticos-de-AEDS-II_c9196ca4"
+        },
+        {
+            "type": "java",
+            "name": "SelectionSort",
+            "request": "launch",
+            "mainClass": "SelectionSort",
+            "projectName": "PUC-Minas-Trabalhos-Praticos-de-AEDS-II_c9196ca4"
+        },
+        {
+            "type": "java",
+            "name": "List",
+            "request": "launch",
+            "mainClass": "List",
+            "projectName": "PUC-Minas-Trabalhos-Praticos-de-AEDS-II_c9196ca4"
+        },
+        {
             "name": "Java",
             "type": "java",
             "request": "launch",
